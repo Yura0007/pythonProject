@@ -1,0 +1,84 @@
+#:kivy 2.0.0
+WindowManager:
+    ScreenOne:
+    ImageSelector:
+    ClassificationResultWindow:
+    ScreenTwo:
+
+
+
+<ScreenOne>:
+    name: "screen_one"
+    id: screen_one
+    BoxLayout:
+        Button:
+            text: "Go to Screen 1"
+            background_color : 0, 1, 10, 1
+            on_press:
+
+                root.manager.transition.direction = 'left'
+                root.manager.transition.duration = 2
+                root.manager.current = 'image_selector'
+
+
+<ImageSelector>:
+    name: "image_selector"
+    id: image_selector
+    BoxLayout:
+        orientation: 'vertical'
+        id: image_box
+        FileChooserListView:
+            id: filechooser
+            on_selection:
+                root.manager.selected(filechooser.selection)
+                print(root.manager.image_source)
+            size_hint: 1, 10
+        Image:
+            id: image
+            source: root.manager.image_source
+            size_hint: 1, 4
+        Button:
+            id: diagnose
+            text: "Count Objects"
+            on_release:
+                print(root.manager.image_source)
+                root.manager.build()
+
+                app.root.current = "classification_result"
+
+<ClassificationResultWindow>:
+    name: "classification_result"
+    BoxLayout:
+        orientation: 'vertical'
+        id: box
+        Image:
+            id: scan
+            source: root.manager.image_source
+
+
+            size_hint: 1, 10
+        Button:
+            id: label
+            text: "Here comes the classification result"
+            on_release:
+                print(root.manager.image_source)
+
+                root.manager.current = "screen_two"
+
+<ScreenTwo>:
+    name: "screen_two"
+    BoxLayout:
+        orientation: 'vertical'
+        id: box
+        Image:
+            id: scan
+            source: root.manager.image_source
+
+            size_hint: 1, 10
+        Button:
+            id: label
+            text: "Here comes the classification result"
+            on_release:
+                print(root.manager.image_source)
+
+                app.root.current = "screen_one"
